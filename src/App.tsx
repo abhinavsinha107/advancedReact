@@ -1,15 +1,37 @@
-import React from 'react';
+import { useEffect } from 'react';
 import './App.css';
-import Counter from './components/Counter';
+import {
+  useGetToDoByIdQuery,
+  useGetToDosQuery,
+  useLazyGetToDoByIdQuery,
+} from "./services/api";
 // import Demo from './components/useReducer/Demo';
 // import Demo from './components/useContext/Demo';
+// import Counter from './components/Counter';
+
 
 function App() {
-  return (
+   const { data = [], isError, isLoading } = useGetToDosQuery();
+
+  useEffect(() => {
+    if (isError) console.log("Error occured");
+  }, [data]);
+
+  // return (
+  //   <div>
+  //     {/* <Demo /> */}
+  //     {/* <Demo /> */}
+  //     {/* <Counter /> */}
+  //   </div>
+  // );
+
+  return isLoading ? (
+    <div> Loading ...</div>
+  ) : (
     <div>
-      {/* <Demo /> */}
-      {/* <Demo /> */}
-      <Counter />
+      {data.map((d) => {
+        return <div key={d.id}>{d.title}</div>;
+      })}
     </div>
   );
 }
